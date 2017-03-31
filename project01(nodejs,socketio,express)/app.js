@@ -8,6 +8,10 @@ var connectMongo = require('connect-mongo')(session);
 var config = require('./config.js');
 var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
+var rooms = [{
+  room_name: 'cloud computhing',
+  room_number: 902312
+}]
 
 var PORT = 3000;
 var db = mongoose.connection;
@@ -52,7 +56,7 @@ require('./routes/routes.js')(express, app, passport)
 
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
-
+require('./socket/socket.js')(io)
 server.listen(PORT, function(){
   console.log(`${PORT}`);
 })
