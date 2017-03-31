@@ -1,14 +1,23 @@
 import React from 'react';
+import styles from './App.css';
 
-class App extends React.Component {
-    render(){
+export default class App extends React.Component {
+    componentDidMount(){
+      console.log('componentDidMount');
+    }
+    componentWillMount() {
+        document.body.style.margin = 0;
+        document.body.style.padding = 0;
+        console.log('componentWillMount');
+    }
+
+    render() {
         return (
-            <div>
-                hello world
+            <div className={styles.container}>
+                <div className={styles.testing}>
+                    hello
+                </div>
             </div>
-            // <h1>Hello World from react - hot reload</h1>
         );
     }
 }
-
-export default App;

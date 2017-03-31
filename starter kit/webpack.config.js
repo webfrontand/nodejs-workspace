@@ -18,6 +18,10 @@ var config = {
 				loader: "babel-loader",
 				query:{
 					presets:["react","es2015","stage-2"]
+				},
+				{
+					test: /\.css$/,
+					loader: 'style!css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]'
 				}
 			}
 		]
