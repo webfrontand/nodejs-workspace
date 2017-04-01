@@ -15,7 +15,8 @@ export default class App extends React.Component {
         return (
             <div className={styles.container}>
                 <div className={styles.testing}>
-                    hello
+                    <a href="/auth/facebook/callback">페이스북 로그인</a>
+                    <a href="/logout">로그아웃</a>
                 </div>
             </div>
         );
