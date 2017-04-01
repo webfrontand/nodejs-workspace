@@ -39,11 +39,14 @@ app.get('/auth/facebook', passport.authenticate('facebook', {
 }));
 
 app.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/' }), function(req, res) {
-  res.json({
-    user: req.user ? req.user : "undefined"
-  })
+  res.redirect('/');
 });
 
+app.get('/check', (req, res) => {
+  res.json({
+    check: req.user ? req.user : "undefined"
+  })
+})
 app.get('/logout', (req, res) => {
   req.logout()
   res.redirect('/');
