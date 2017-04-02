@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-const Auth = () => {
-  return (
-    <div>
-      <a href="/auth/facebook/callback">페이스북 로그인</a>
-      <a href="/logout">로그아웃</a>
-    </div>
-  )
+class Auth extends Component {
+  render(){
+    return (
+      <div>
+        <a href="/auth/facebook/callback">페이스북 로그인</a>
+        <a href="#">회원가입</a>
+      </div>
+    )
+  }
 }
 
 export default Auth;

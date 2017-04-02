@@ -1,18 +1,17 @@
 import React, { Component } from 'react';
 import styles from './App.css';
-import { checkLoginRequest } from '../../actions/check';
+import { checkLoginRequest } from '../../actions/checking';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 class App extends Component {
     componentDidMount(){
       this.props.checkLoginRequest();
-      console.log('componentDidMount');
     }
     componentWillMount() {
         document.body.style.margin = 0;
         document.body.style.padding = 0;
-        console.log('componentWillMount');
+
     }
 
     render() {
@@ -28,7 +27,7 @@ class App extends Component {
 
 function mapStateToProps(state){
   return {
-    status: state.user.user.status
+    status: state.check.status
   }
 }
 

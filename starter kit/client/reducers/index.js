@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
-import user from './user';
+import check from './check';
 
 export default combineReducers({
-  user
+  check
 })

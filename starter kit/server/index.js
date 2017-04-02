@@ -16,6 +16,8 @@ import webpackMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import webpackConfig from '../webpack.config.dev';
 
+import api from './routes';
+
 const app = express();
 const port = 3000;
 
@@ -34,23 +36,7 @@ configExpress(app, passport, mongoose);
 configPassport(passport, FacebookStrategy, config)
 
 // ********************************************
-app.get('/auth/facebook', passport.authenticate('facebook', {
-  scope: ['email']
-}));
-
-app.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/' }), function(req, res) {
-  res.redirect('/');
-});
-
-app.get('/check', (req, res) => {
-  res.json({
-    check: req.user ? req.user : "undefined"
-  })
-})
-app.get('/logout', (req, res) => {
-  req.logout()
-  res.redirect('/');
-})
+app.use('/', api);
 
 app.get('/*', (req,res) => {
     res.sendFile(path.join(__dirname, './index.html'));

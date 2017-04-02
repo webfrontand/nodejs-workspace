@@ -5,5 +5,5 @@ export default {
   'appID': '219961725135154',
   'appSecret': 'empty',
   'callbackURL': 'http://localhost:3000/auth/facebook/callback',
-  'profileFields': ['id', 'name', 'emails', 'friends', 'gender', 'displayName']
+  'profileFields': ['id', 'displayName']
 }

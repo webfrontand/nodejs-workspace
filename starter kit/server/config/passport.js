@@ -19,61 +19,62 @@ export default function(passport, FacebookStrategy, config){
       profileFields: config.profileFields
     },
     (access_token, refresh_token, profile, done) => {
-
-      User.findOne({'o_auth.facebook.id': profile.id}, (err, user) => {
-        if(user){
-          done(null, user);
-        } else {
-          const newUser = new User({
-            type: 'facebook',
-            commont_profile: {
-              username: profile.displayName,
-              email: profile.emails ? (profile.emails.length > 0 ? profile.emails[0].value : null) : null
-            },
-            o_auth: {
-              facebook: {
-                id: profile.id,
-                access_token
-              }
-            }
-          })
-
-          newUser.save((err) => {
+      User.findFacebookId(profile.id)
+      .then(
+        (user) => {
+          // user is found
+          if(user) {
             done(null, user);
-          });
+            return;
+          } else {
+            const newUser = new User({
+              type: 'facebook',
+              common_profile: {
+                username: profile.displayName,
+                email: profile.emails ? (profile.emails.length > 0 ? profile.emails[0].value : null) : null
+              },
+              o_auth: {
+                facebook: {
+                  id: profile.id,
+                  access_token
+                }
+              }
+            })
+
+            return newUser.save();
+          }
         }
-      })
-      // User.findFacebookId(profile.id)
-      // .then(
-      //   (user) => {
-      //     // user is found
-      //     if(user) {
-      //       done(null, user);
-      //       return;
-      //     } else {
-      //       const newUser = new User({
-      //         type: 'facebook',
-      //         commont_profile: {
-      //           username: profile.displayName,
-      //           email: profile.emails ? (profile.emails.length > 0 ? profile.emails[0].value : null) : null
-      //         },
-      //         o_auth: {
-      //           facebook: {
-      //             id: profile.id,
-      //             access_token
-      //           }
-      //         }
-      //       })
-      //
-      //       return newUser.save();
-      //     }
-      //   }
-      // ).then(
-      //   (user) => {
-      //     if(!user) return;
-      //     return done(null, user);
-      //   }
-      // )
-    }
-  ));
+      ).then(
+        (user) => {
+          if(!user) return;
+          return done(null, user);
+        }
+      )
+    }));
 }
+
+
+
+// User.findOne({'o_auth.facebook.id': profile.id}, (err, user) => {
+//   if(user){
+//     done(null, user);
+//   } else {
+//     const newUser = new User({
+//       type: 'facebook',
+//       commont_profile: {
+//         username: profile.displayName,
+//         email: profile.emails ? (profile.emails.length > 0 ? profile.emails[0].value : null) : null
+//       },
+//       o_auth: {
+//         facebook: {
+//           id: profile.id,
+//           access_token
+//         }
+//       }
+//     })
+//
+//     newUser.save((err) => {
+//       done(null, user);
+//     });
+//   }
+// })

@@ -3,13 +3,15 @@ import {
   CHECK_SUCCESS,
   CHECK_FAILURE
 } from './types';
-import axios from 'axios';
+import * as services from '../services/checking';
+import { browserHistory } from 'react-router';
 
 export function checkLoginRequest(){
   return (dispatch) => {
-    return axios.get('/check').then((response) => {
-      if(response.data.check){
-        dispatch(checkSuccess(response.data.check));
+    return services.checking().then((response) => {
+      if(response.data.success){
+        dispatch(checkSuccess(response.data.user));
+        browserHistory.push('/myroom')
       } else {
         dispatch(checkFailure());
       }
@@ -23,10 +25,10 @@ export function check(){
   }
 }
 
-export function checkSuccess(info){
+export function checkSuccess(user){
   return {
     type: CHECK_SUCCESS,
-    info
+    user
   }
 }
 
