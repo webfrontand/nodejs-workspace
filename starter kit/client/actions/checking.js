@@ -8,6 +8,7 @@ import { browserHistory } from 'react-router';
 
 export function checkLoginRequest(){
   return (dispatch) => {
+    dispatch(check())
     return services.checking().then((response) => {
       if(response.data.success){
         dispatch(checkSuccess(response.data.user));

@@ -1,4 +1,6 @@
 import User from '../models/user';
+import passportError from './passportError';
+import { generateHash } from '../helpers/bcrypt';
 
 export default function(passport, FacebookStrategy, LocalStrategy, config){
     passport.serializeUser((user, done) => {
@@ -59,17 +61,22 @@ export default function(passport, FacebookStrategy, LocalStrategy, config){
           User.findUsername(username).then(
             (user) => {
               if(user) {
-                return
+                throw new passportError(1, "user exists");
               } else {
-                const user = new User({
-                  type: 'local',
-                  common_profile: {
-                    username: username
-                  }
-                });
-
-                return user.save();
+                return generateHash(password);
               }
+            }
+          ).then(
+            (hash) => {
+              const user = new User({
+                type: 'local',
+                common_profile: {
+                  username: username,
+                  password: hash
+                }
+              });
+
+              return user.save();
             }
           ).then(
             (user) => {
@@ -77,7 +84,7 @@ export default function(passport, FacebookStrategy, LocalStrategy, config){
             }
           ).catch(
             (error) => {
-              console.log(error);
+              done(error);
             }
           )
         }))

@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { Modal } from '../';
+import { localRegisterRequest } from '../../actions/register';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 class Auth extends Component {
 
@@ -7,10 +10,14 @@ class Auth extends Component {
     super(props);
 
     this.state = {
-      isOpen: false
+      isOpen: false,
+      username:'',
+      password:''
     }
     this.ModalOpen = this.ModalOpen.bind(this);
     this.ModalClose = this.ModalClose.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleRegister = this.handleRegister.bind(this);
   }
 
   ModalOpen(){
@@ -25,6 +32,22 @@ class Auth extends Component {
       });
   }
 
+  handleChange(e){
+    let nextState = {};
+    nextState[e.target.name] = e.target.value;
+    this.setState(nextState);
+    console.log(nextState);
+  }
+
+  handleRegister(){
+    const { username, password } = this.state
+    const data = {
+      username,
+      password
+    }
+    this.props.localRegisterRequest(data);
+  }
+
   render(){
     return (
       <div>
@@ -37,17 +60,24 @@ class Auth extends Component {
           </p>
           <div>
             <div>
-              <input type="text" name="username" placeholder="username"/>
+              <input
+                type="text"
+                name="username"
+                placeholder="username"
+                onChange={this.handleChange}
+              />
             </div>
             <div>
-              <input type="password" name="password" placeholder="password"/>
-            </div>
-            <div>
-              <input type="text" name="displayname" placeholder="displayname"/>
+              <input
+                type="password"
+                name="password"
+                placeholder="password"
+                onChange={this.handleChange}
+              />
             </div>
           </div>
           <div>
-            <a href="#">
+            <a href="#" onClick={this.handleRegister}>
               회원가입
             </a>
           </div>
@@ -60,4 +90,17 @@ class Auth extends Component {
   }
 }
 
-export default Auth;
+function mapStateToProps(state){
+  return {
+    status: state.check.status
+  }
+}
+
+function mapDispatchToProps(dispatch){
+  return bindActionCreators({
+    localRegisterRequest
+  }, dispatch);
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Auth);

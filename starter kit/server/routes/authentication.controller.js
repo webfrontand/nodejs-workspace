@@ -14,6 +14,9 @@ exports.register = (req, res, next) => {
   }
 
   passport.authenticate('local-register', (err, user, info) => {
+    if(err){
+      return res.json({err, success: false});
+    }
     req.login(user, (err) => {
       if(err){
         return next(err)

@@ -4,7 +4,8 @@ const User = new Schema({
   type: String,
   common_profile: {
     username: String,
-    email: String
+    email: String,
+    password: String
   },
   o_auth: {
     facebook: {
