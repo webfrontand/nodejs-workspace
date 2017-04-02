@@ -20,4 +20,10 @@ User.statics.findFacebookId = function(id){
   });
 }
 
+User.statics.findUsername = function(username){
+  return this.findOne({
+    'common_profile.username': username
+  })
+}
+
 export default mongoose.model("users", User);

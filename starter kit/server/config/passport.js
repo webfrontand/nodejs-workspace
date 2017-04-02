@@ -1,6 +1,6 @@
 import User from '../models/user';
 
-export default function(passport, FacebookStrategy, config){
+export default function(passport, FacebookStrategy, LocalStrategy, config){
     passport.serializeUser((user, done) => {
       done(null, user.id);
     });
@@ -8,7 +8,6 @@ export default function(passport, FacebookStrategy, config){
     passport.deserializeUser((id, done) => {
       User.findById(id, (err, user) => {
         done(err, user);
-        console.log(user);
       })
     });
 
@@ -51,7 +50,40 @@ export default function(passport, FacebookStrategy, config){
         }
       )
     }));
+
+    passport.use(
+      'local-register',
+      new LocalStrategy(
+        { passReqToCallback: true },
+        (req, username, password, done) => {
+          User.findUsername(username).then(
+            (user) => {
+              if(user) {
+                return
+              } else {
+                const user = new User({
+                  type: 'local',
+                  common_profile: {
+                    username: username
+                  }
+                });
+
+                return user.save();
+              }
+            }
+          ).then(
+            (user) => {
+              return done(null, user)
+            }
+          ).catch(
+            (error) => {
+              console.log(error);
+            }
+          )
+        }))
+
 }
+
 
 
 

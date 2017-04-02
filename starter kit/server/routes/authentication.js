@@ -12,6 +12,7 @@ router.get('/facebook/callback', passport.authenticate('facebook', { failureRedi
   res.redirect('/');
 });
 
-router.get('/logout', controller.logout)
+router.post('/register', controller.register);
+router.get('/logout', controller.logout);
 
 export default router;

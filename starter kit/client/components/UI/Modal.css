@@ -1,0 +1,49 @@
+.backdropStyle {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 9998;
+  background-color: rgba(0,0,0, .3);
+}
+
+.modalStyle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  background-color: #000;
+  min-height: 400px;
+  min-width: 400px;
+}
+
+.modalStyle h1 {
+  background-color: #000;
+  padding: 0;
+  margin: 0;
+  height: 90px;
+  line-height: 90px;
+  text-align: center;
+  border-bottom: 3px solid #fff;
+}
+
+.modalStyle p {
+  color :#fff;
+  font-size: 2rem;
+  text-align: center;
+
+}
+
+.modalStyle span {
+  color: #fff;
+  position: absolute;
+  top:0;
+  right: 0;
+  padding: 20px;
+  border-radius: 50%;
+  width: 50px;
+  background-color: #000;
+  cursor: pointer;
+}

@@ -3,6 +3,7 @@ import path from 'path';
 
 import passport from 'passport';
 import { Strategy as FacebookStrategy }  from 'passport-facebook';
+import { Strategy as LocalStrategy } from 'passport-local';
 
 import mongoose from 'mongoose';
 
@@ -33,7 +34,7 @@ app.use(webpackHotMiddleware(compiler));
 
 configMongoose(config);
 configExpress(app, passport, mongoose);
-configPassport(passport, FacebookStrategy, config)
+configPassport(passport, FacebookStrategy, LocalStrategy, config)
 
 // ********************************************
 app.use('/', api);
