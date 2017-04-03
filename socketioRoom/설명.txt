@@ -1,0 +1,8 @@
+socketio events for email app
+emitting and listening to events
+
+
+데이터를 보내고 상대에게 보내고 싶다면 emit
+받고 싶다면 on
+
+API 자체는 간단하지만, 복잡한 이벤트 흐름을 쫓는 것은 힘들다.
