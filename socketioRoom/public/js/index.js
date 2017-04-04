@@ -5,6 +5,7 @@ $(function(){
   var messageForm = $('#message-form');
   var messageInput = $('#message-input');
   var lists = $('#lists');
+  var sendLocation = $('#send-location');
 
   socket.on('connect', function() {
     console.log('connect to server');
@@ -38,4 +39,21 @@ $(function(){
     });
   })
 
+  sendLocation.on('click', function(){
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(function(position){
+        console.log(position);
+        socket.emit('createLocationMessage', {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
+        })
+      }, function() {
+        console.log('unable to fetch location');
+      })
+    } else {
+      alert('geolocation API를 지원하지 않습니다.');
+    }
+
+
+  })
 }());
