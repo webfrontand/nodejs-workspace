@@ -38,7 +38,9 @@ $(function(){
 
     });
   })
-
+  socket.on('newLocationMessage', function(data){
+    lists.append(`<li><a href=${data.url} target="_blank">구글 맵으로!</a></li>`)
+  });
   sendLocation.on('click', function(){
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(function(position){

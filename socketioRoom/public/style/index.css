@@ -1,0 +1,66 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  height: 100vh;
+}
+
+ul {
+  list-style: none;
+  padding: 1rem;
+}
+
+.people {
+  background: #0040ff;
+  flex-grow: 1;
+}
+
+.people h1 {
+  text-align: center;
+  color: #fff;
+}
+
+#lists {
+  height: 100vh;
+}
+
+.form {
+  flex-grow: 7;
+  flex-basis: 300px;
+  display: flex;
+  flex-direction: column;
+
+}
+
+#message-form {
+  background-color: #fff;
+  display: flex;
+}
+
+#message-input {
+  border: none;
+  padding: 1rem;
+  flex-grow: 7
+}
+
+#message-btn, #send-location {
+  padding: 1rem;
+  flex-grow: 1;
+  background-color: #0040ff;
+  border: none;
+  color: #fff;
+}
+
+@media screen and (max-width: 700px) {
+  .people {
+    height: 90px;
+    line-height: 90px;
+  }
+  #message-form{
+    flex-direction: column;
+  }
+}
