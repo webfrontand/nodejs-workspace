@@ -8,19 +8,25 @@
   <title>Document</title>
 </head>
 <body>
-
-  <div class="container">
-    <div class="people">
-      <h1>People</h1>
-    </div>
-    <div class="form">
-      <ul id="lists"></ul>
-      <form id="message-form">
-        <input name="message" type="text" placeholder="Message" id="message-input"/>
-        <button type="submit" id="message-btn">Send</button>
-        <button id="send-location">Location</button>
-      </form>
-    </div>
+  <div class="join-container">
+    <form action="/chat.html">
+      <div class="box">
+        <h1>Join a Chat</h1>
+        <div class="join-input">
+          <div class="join-field">
+            <label>Display name</label>
+            <input type="text" name="name" autofocus />
+          </div>
+          <div class="join-field">
+            <label>Room name</label>
+            <input type="text" name="room" />
+          </div>
+          <div class="join-field">
+            <button class="join-btn">join</button>
+          </div>
+        </div>
+      </div>
+    </form>
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>

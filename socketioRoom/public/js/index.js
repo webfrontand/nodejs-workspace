@@ -6,6 +6,22 @@ $(function(){
   var messageInput = $('#message-input');
   var lists = $('#lists');
   var sendLocation = $('#send-location');
+  var people = $('.people');
+
+
+  function scrollToBottom() {
+      //selectors
+      var clientHeight = people.prop('clientHeight'); // 사용자가 보이는 영역
+      var scrollTop = people.prop('scrollTop'); //
+      var scrollHeight = people.prop('scrollHeight');
+
+      if(clientHeight + scrollTop >= scrollHeight){
+        console.log('should scroll');
+      }
+
+      // 이부분은 필요할떄 다시 보자.
+      // heights
+  }
 
   socket.on('connect', function() {
     console.log('connect to server');
@@ -20,6 +36,7 @@ $(function(){
     console.log(message);;
     lists.append(`<li>${message.text}</li>`);
     messageInput.val('');
+    scrollToBottom()
   });
 
   socket.emit('createMessage', {
@@ -39,7 +56,8 @@ $(function(){
     });
   })
   socket.on('newLocationMessage', function(data){
-    lists.append(`<li><a href=${data.url} target="_blank">구글 맵으로!</a></li>`)
+    lists.append(`<li><a href=${data.url} target="_blank">구글 맵으로!</a></li>`);
+    scrollToBottom()
   });
   sendLocation.on('click', function(){
     if ("geolocation" in navigator) {
