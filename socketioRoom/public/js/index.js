@@ -32,11 +32,14 @@ $(function(){
         console.log('no error');
       }
     });
-
   });
 
   socket.on('disconnect', function() {
     console.log('disconnect from server');
+  });
+
+  socket.on('updateUserList', function(users){
+    console.log(users);
   });
 
   socket.on('newMessage', function(message) {

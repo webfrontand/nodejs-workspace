@@ -6,8 +6,10 @@ const io = require('socket.io')(server);
 
 const { generateMessage, generateLocationMessage } = require('./utils/message');
 const { isRealString } = require('./utils/validation');
+const Users = require('./utils/users');
 
 const port = process.env.PORT || 3000;
+let users = new Users();
 
 app.use(express.static(path.join(__dirname, '../public')));
 
@@ -32,10 +34,14 @@ io.on('connection', (socket) => {
 
   socket.on('join', (params, callback) => {
     if(!isRealString(params.name) || !isRealString(params.room)){
-      callback('Name and room name are required');
+      return callback('Name and room name are required');
     }
 
     socket.join(params.room);
+    users.removeUser(socket.id);
+    users.addUser(socket.id, params.name, params.room);
+
+    io.to(params.room).emit('updateUserList', users.getUserList(params.room));
     // socket.leave();
 
     // io.emit -> io.to(params.room).emit()
@@ -52,6 +58,12 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     console.log('user was disconnect');
+    var user = users.removeUser(socket.id);
+
+    if(user) {
+      io.to(user.room).emit('updateUserList', users.getUserList(user.room));
+      io.to(user.room).emit('newMessage', generateMessage('Admin', `${user.name} has left!`));
+    }
   });
 });
 
