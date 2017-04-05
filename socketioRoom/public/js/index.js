@@ -40,6 +40,13 @@ $(function(){
 
   socket.on('updateUserList', function(users){
     console.log(users);
+    var ol = $('<ol></ol>');
+
+    users.forEach(function(user) {
+      ol.append($(`<li>${user}</li>`));
+    });
+
+    $('#lists').html(ol);
   });
 
   socket.on('newMessage', function(message) {
