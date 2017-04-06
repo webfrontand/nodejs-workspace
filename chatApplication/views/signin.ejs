@@ -6,6 +6,9 @@
 </head>
 <body>
   <div class="container">
+      <% if (message.length > 0) { %>
+        <div class="alert alert-danger"><%= message %></div>
+      <% } %>
       <form method="post" class="form-signin" action="/signin">
 
         <h2 class="form-signin-heading">Sign in</h2>

@@ -1,7 +1,5 @@
 const User = require('../models/user');
 
-// const { generateHash, compareHash } = require('../helpers/bcrypt');
-
 module.exports = function(passport, LocalStrategy, FacebookStrategy){
   passport.serializeUser(function(user, done) {
     done(null, user.id);
@@ -63,10 +61,11 @@ module.exports = function(passport, LocalStrategy, FacebookStrategy){
 
           // create the user
           var newUser            = new User();
+          newUser.type = 'local'
           newUser.common_profile.email = email;
           newUser.common_profile.password = newUser.generateHash(password);
           newUser.common_profile.username = req.body.username;
-          
+
           newUser.save(function(err) {
               if (err)
                   throw err;
@@ -83,32 +82,23 @@ module.exports = function(passport, LocalStrategy, FacebookStrategy){
 
 
   passport.use('local-signin', new LocalStrategy({
-    usernameField: 'email'
-  }, function(email, password, done) {
-    let _user = undefined;
-
-    User.findEmail(email)
-    .then(function(user) {
-      if(user) {
-        console.log(user);
-        _user = user;
-        console.log(user);
-        return compareHash(user.common_profile.password, password);
-      } else {
-        return done(null, false);
+    usernameField: 'email',
+    passwordField: 'password',
+    passReqToCallback : true
+  }, function(req, email, password, done) {
+    User.findOne({'common_profile.email' : email}, function (err, user) {
+      if(err) {
+          return done(err);
       }
-    }).then(function(result) {
-      if(result) {
-        return done(null, {
-          id: _user._id.toString(),
-          common_profile: _user.common_profile
-        });
-      } else {
-        return done(null, false);
+      if(!user) {
+          return done(null, false, req.flash('loginMessage', '존재하지 않는 이메일입니다.')); // req.flash is the way to set flashdata using connect-flash
+        }
+      // if the user is found but the password is wrong
+      if(!user.validPassword(password)) {
+          return done(null, false, req.flash('loginMessage', '비밀번호가 틀렸어요!')); // create the loginMessage and save it to session as flashdata
       }
-    }).catch(function(error){
-      console.error(error);
-      return done(error);
+      // all is well, return successful user
+      return done(null, user);
     })
   }))
 }

@@ -22,14 +22,22 @@ router.post('/signup', passport.authenticate('local-signup', {
 }));
 
 router.get('/signin', function(req, res) {
-  res.render('signin');
+  res.render('signin', {
+    message: req.flash('loginMessage')
+  });
 });
 
 router.post('/signin', passport.authenticate('local-signin', {
   successRedirect : '/',
   failureRedirect : '/signin',
   failureFlash: true
-}))
+}));
+
+router.get('/mypage', function(req, res) {
+  res.render('mypage', {
+    user: req.user
+  });
+})
 
 router.get('/auth/facebook', passport.authenticate('facebook'));
 

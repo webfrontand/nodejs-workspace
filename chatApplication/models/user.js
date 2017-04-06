@@ -23,8 +23,10 @@ User.methods.generateHash = function(password) {
 
 // checking if password is valid
 User.methods.validPassword = function(password) {
-    return bcrypt.compareSync(password, this.local.password);
+    return bcrypt.compareSync(password, this.common_profile.password);
 };
+
+
 
 User.statics.findEmail = function(email){
   return this.findOne({
