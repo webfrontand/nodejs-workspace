@@ -1,4 +1,8 @@
 <div class="jumbotron">
-  <h1>Hello, Chat App!</h1>
+  <% if(user) { %>
+    <h1>Hello, Chat App! <%= user.common_profile.username %></h1>
+  <% } else { %>
+    <h1>Hello, Chat App!</h1>
+  <% } %>
   <button type="button" class="btn btn-primary">내 방으로</button>
 </div>

@@ -28,4 +28,10 @@ User.statics.findEmail = function(email){
   }).exec();
 }
 
+User.statics.findFacebookId = function(id){
+  return this.findOne({
+    'o_auth.facebook.id': id
+  }).exec();
+}
+
 module.exports = mongoose.model('users', User);

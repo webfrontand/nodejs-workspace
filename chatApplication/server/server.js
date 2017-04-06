@@ -13,9 +13,15 @@ const port = process.env.PORT || 3000;
 
 const mongoose = require('mongoose');
 
+const routes = require('../routes/');
+
+
 expressConfig(app, mongoose, passport);
 mongooseConfig(mongoose);
 passportConfig(passport, LocalStrategy, FacebookStrategy);
+
+app.use('/', routes);
+
 
 http.listen(port, function(){
   console.log(`Express Server running ${port}`);

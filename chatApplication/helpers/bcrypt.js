@@ -12,6 +12,8 @@ const generateHash = function(password){
 }
 
 const compareHash = function(hash, password) {
+  console.log(hash);
+  console.log(password);
   return new Promise(function(resolve, reject) {
     bcrypt.compare(password, hash, function(err, result) {
       if(err){
