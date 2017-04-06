@@ -3,7 +3,7 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const connectMongo = require('connect-mongo');
 const path = require('path');
-
+const flash = require('connect-flash');
 const MongoStore = connectMongo(session);
 
 module.exports = function(app, mongoose, passport){
@@ -26,10 +26,12 @@ module.exports = function(app, mongoose, passport){
     })
   }));
 
-
-
   app.use(passport.initialize());
   app.use(passport.session());
-
+  app.use(flash());
+  // app.use(function(req, res, next){
+  //   res.locals.flash = req.flash
+  //   next()
+  // })
 
 }

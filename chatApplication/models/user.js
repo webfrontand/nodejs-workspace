@@ -1,12 +1,13 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const bcrypt = require('bcrypt-nodejs');
 
 const User = new Schema({
   type: String, // local, facebook, ...
   common_profile: {
-    username: String,
     email: String,
-    password: String
+    password: String,
+    username: String
   },
   o_auth: {
     facebook: {
@@ -16,22 +17,25 @@ const User = new Schema({
   }
 });
 
-User.statics.findUsername = function(username){
-  return this.findOne({
-    'common_profile.username': username
-  }).exec();
-}
+User.methods.generateHash = function(password) {
+    return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+};
+
+// checking if password is valid
+User.methods.validPassword = function(password) {
+    return bcrypt.compareSync(password, this.local.password);
+};
 
 User.statics.findEmail = function(email){
   return this.findOne({
     'common_profile.email': email
-  }).exec();
+  })
 }
 
 User.statics.findFacebookId = function(id){
   return this.findOne({
     'o_auth.facebook.id': id
-  }).exec();
+  })
 }
 
 module.exports = mongoose.model('users', User);

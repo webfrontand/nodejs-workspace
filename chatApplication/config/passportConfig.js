@@ -1,6 +1,6 @@
 const User = require('../models/user');
 
-const { generateHash, compareHash } = require('../helpers/bcrypt');
+// const { generateHash, compareHash } = require('../helpers/bcrypt');
 
 module.exports = function(passport, LocalStrategy, FacebookStrategy){
   passport.serializeUser(function(user, done) {
@@ -46,36 +46,41 @@ module.exports = function(passport, LocalStrategy, FacebookStrategy){
 
 
   passport.use('local-signup', new LocalStrategy({
-    passReqToCallback : true
-  }, function(req, username, password, done) {
-      User.findEmail(req.body.email).then(function(user) {
-        if(user) {
-          return done(null, false);
-        } else {
-          return User.findUsername(username);
-        }
-      }).then(function(user) {
-        if(user) {
-          return done(null, false);
-        } else {
-          return generateHash(password);
-        }
-      }).then(function(hash) {
-        const newUser = new User({
-          type: 'local',
-          common_profile: {
-            username: username,
-            password: hash,
-            email: req.body.email
-          }
-        });
+      // by default, local strategy uses username and password, we will override with email
+      usernameField : 'email',
+      passwordField : 'password',
+      passReqToCallback : true // allows us to pass back the entire request to the callback
+  }, function(req, email, password, done) {
+    process.nextTick(function() {
+      User.findOne({ 'common_profile.email' :  email }, function(err, user) {
+        if (err)
+          return done(err);
 
-        return newUser.save();
-      }).then(function(user) {
-        return done(null, user);
-      })
+        // if user exists already
+        if (user) {
+          return done(null, false, req.flash('signupMessage', '이미 존재하는 이메일입니다.'));
+        } else {
 
-  }))
+          // create the user
+          var newUser            = new User();
+          newUser.common_profile.email = email;
+          newUser.common_profile.password = newUser.generateHash(password);
+          newUser.common_profile.username = req.body.username;
+          
+          newUser.save(function(err) {
+              if (err)
+                  throw err;
+              return done(null, newUser);
+          });
+        }
+      });
+    });
+  }));
+
+
+
+
+
 
   passport.use('local-signin', new LocalStrategy({
     usernameField: 'email'

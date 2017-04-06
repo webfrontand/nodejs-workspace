@@ -15,7 +15,6 @@ const mongoose = require('mongoose');
 
 const routes = require('../routes/');
 
-
 expressConfig(app, mongoose, passport);
 mongooseConfig(mongoose);
 passportConfig(passport, LocalStrategy, FacebookStrategy);

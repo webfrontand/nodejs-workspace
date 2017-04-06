@@ -9,12 +9,16 @@ router.get('/', function(req, res) {
 });
 
 router.get('/signup', function(req, res) {
-  res.render('signup');
+  res.render('signup', {
+    message: req.flash('signupMessage')
+  });
 });
+
 
 router.post('/signup', passport.authenticate('local-signup', {
   successRedirect : '/',
-  failureRedirect : '/signup'
+  failureRedirect : '/signup',
+  failureFlash: true
 }));
 
 router.get('/signin', function(req, res) {
@@ -23,7 +27,8 @@ router.get('/signin', function(req, res) {
 
 router.post('/signin', passport.authenticate('local-signin', {
   successRedirect : '/',
-  failureRedirect : '/signin'
+  failureRedirect : '/signin',
+  failureFlash: true
 }))
 
 router.get('/auth/facebook', passport.authenticate('facebook'));
