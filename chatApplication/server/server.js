@@ -22,7 +22,6 @@ passportConfig(passport, LocalStrategy, FacebookStrategy);
 
 app.use('/', routes);
 
-
 http.listen(port, function(){
   console.log(`Express Server running ${port}`);
 });
