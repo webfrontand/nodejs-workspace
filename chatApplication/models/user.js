@@ -19,13 +19,13 @@ const User = new Schema({
 User.statics.findUsername = function(username){
   return this.findOne({
     'common_profile.username': username
-  });
+  }).exec();
 }
 
 User.statics.findEmail = function(email){
   return this.findOne({
     'common_profile.email': email
-  });
+  }).exec();
 }
 
 module.exports = mongoose.model('users', User);

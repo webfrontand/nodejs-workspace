@@ -16,11 +16,11 @@ module.exports = function(passport, LocalStrategy, FacebookStrategy){
   passport.use('local-signup', new LocalStrategy({
     passReqToCallback : true
   }, function(req, username, password, done) {
-    process.nextTick(function(){
+
 
       User.findEmail(req.body.email).then(function(user) {
-        console.log(user);
         if(user) {
+          console.log('true');
           return done(null, false, req.flash('signupMessage', 'exist email'));
         } else {
           return User.findUsername(username);
@@ -47,7 +47,6 @@ module.exports = function(passport, LocalStrategy, FacebookStrategy){
       }).catch(function(error) {
         done(error);
       })
-    })
 
   }))
 
