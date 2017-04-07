@@ -2,9 +2,18 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 
+function checkAuthentication(req, res, next) {
+  if(req.isAuthenticated()){
+    next();
+  } else {
+    req.flash('systemMessage', "로그인을 하세요!")
+    res.redirect('/');
+  }
+}
 router.get('/', function(req, res) {
   res.render('index', {
-    user: req.user
+    user: req.user,
+    message: req.flash('systemMessage')
   });
 });
 
@@ -33,7 +42,7 @@ router.post('/signin', passport.authenticate('local-signin', {
   failureFlash: true
 }));
 
-router.get('/mypage', function(req, res) {
+router.get('/mypage', checkAuthentication, function(req, res) {
   res.render('mypage', {
     user: req.user
   });

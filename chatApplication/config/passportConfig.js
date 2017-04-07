@@ -17,14 +17,14 @@ module.exports = function(passport, LocalStrategy, FacebookStrategy){
     callbackURL: 'http://localhost:3000/auth/facebook/callback',
     profileFields: ['id', 'displayName']
   }, function(access_token, refresh_token, profile, done){
-    User.findFacebookId(profile.id).then(function(user) {
+    User.findByFacebookId(profile.id).then(function(user) {
       if(user){
         return done(null, user);
       } else {
         const newUser = new User({
           type: 'facebook',
           common_profile: {
-            username: profile.displayName
+            displayname: profile.displayName
           },
           o_auth: {
             facebook: {
@@ -50,29 +50,42 @@ module.exports = function(passport, LocalStrategy, FacebookStrategy){
       passReqToCallback : true // allows us to pass back the entire request to the callback
   }, function(req, email, password, done) {
     process.nextTick(function() {
+
+
       User.findOne({ 'common_profile.email' :  email }, function(err, user) {
-        if (err)
+        if(err) {
           return done(err);
-
-        // if user exists already
-        if (user) {
-          return done(null, false, req.flash('signupMessage', '이미 존재하는 이메일입니다.'));
-        } else {
-
-          // create the user
-          var newUser            = new User();
-          newUser.type = 'local'
-          newUser.common_profile.email = email;
-          newUser.common_profile.password = newUser.generateHash(password);
-          newUser.common_profile.username = req.body.username;
-
-          newUser.save(function(err) {
-              if (err)
-                  throw err;
-              return done(null, newUser);
-          });
         }
-      });
+        if(req.body.password != req.body.confirmpassword) {
+          return done(null, false, req.flash('signupMessage', '비밀번호를 확인하세요!'));
+        } else {
+          if(user) {
+            return done(null, false, req.flash('signupMessage', '이미 존재하는 이메일입니다.'));
+          } else {
+            // console.log('check findByUsername');
+            // console.log(req.body.displayname);
+            return User.findByDisplayname(req.body.displayname).then(function(user) {
+              console.log(user);
+              if(user){
+                return done(null, false, req.flash('signupMessage', '이미 존재하는 이름입니다.'));
+              } else {
+                var newUser = new User();
+                newUser.type = 'local'
+                newUser.common_profile.email = email;
+                newUser.common_profile.password = newUser.generateHash(password);
+                newUser.common_profile.displayname = req.body.displayname;
+
+                newUser.save(function(err) {
+                    if (err)
+                        throw err;
+                    return done(null, newUser);
+                });
+              }
+            })
+          }
+        }
+
+      })
     });
   }));
 

@@ -6,6 +6,9 @@
 <body>
   <% include ./layouts/nav %>
   <div class="container">
+    <% if (message.length > 0) { %>
+      <div class="alert alert-danger"><%= message %></div>
+    <% } %>
     <% include ./layouts/body %>
     <ul class="list-group">
       <h1>생성된 방</h1>

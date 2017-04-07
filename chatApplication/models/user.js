@@ -7,7 +7,7 @@ const User = new Schema({
   common_profile: {
     email: String,
     password: String,
-    username: String
+    displayname: String
   },
   o_auth: {
     facebook: {
@@ -27,14 +27,13 @@ User.methods.validPassword = function(password) {
 };
 
 
-
-User.statics.findEmail = function(email){
+User.statics.findByDisplayname = function(displayname){
   return this.findOne({
-    'common_profile.email': email
-  })
+    'common_profile.displayname': displayname
+  }).exec()
 }
 
-User.statics.findFacebookId = function(id){
+User.statics.findByFacebookId = function(id){
   return this.findOne({
     'o_auth.facebook.id': id
   })
